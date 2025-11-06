@@ -1,11 +1,11 @@
 variable "lambda_function_name" { type = string }
-variable "error_alarm_email"    { type = string }
-variable "tags"                 { type = map(string) }
+variable "error_alarm_email" { type = string }
+variable "tags" { type = map(string) }
 
 resource "aws_cloudwatch_log_group" "lambda" {
   name              = "/aws/lambda/${var.lambda_function_name}"
   retention_in_days = 14
-  tags = var.tags
+  tags              = var.tags
 }
 
 resource "aws_sns_topic" "ops" {

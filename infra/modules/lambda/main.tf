@@ -1,10 +1,8 @@
-variable "function_name"      { type = string }
-variable "sns_topic_arn"      { type = string }
-variable "alert_threshold"    { type = number }
-variable "use_sagemaker_stub" { type = bool }
-variable "sagemaker_endpoint" { type = string }
-variable "environment_vars"   { type = map(string) }
-variable "tags"               { type = map(string) }
+variable "function_name" { type = string }
+variable "sns_topic_arn" { type = string }
+variable "alert_threshold" { type = number }
+variable "environment_vars" { type = map(string) }
+variable "tags" { type = map(string) }
 
 data "archive_file" "zip" {
   type        = "zip"
@@ -14,14 +12,16 @@ data "archive_file" "zip" {
 
 resource "aws_iam_role" "lambda_role" {
   name = "${var.function_name}-role"
+
   assume_role_policy = jsonencode({
-    Version   = "2012-10-17",
+    Version = "2012-10-17",
     Statement = [{
       Effect    = "Allow",
       Principal = { Service = "lambda.amazonaws.com" },
       Action    = "sts:AssumeRole"
     }]
   })
+
   tags = var.tags
 }
 
@@ -33,30 +33,25 @@ resource "aws_iam_role_policy" "lambda_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect = "Allow"
+        Effect = "Allow",
         Action = [
           "logs:CreateLogGroup",
           "logs:CreateLogStream",
           "logs:PutLogEvents"
-        ]
+        ],
         Resource = "*"
       },
       {
-        Effect   = "Allow"
-        Action   = ["sns:Publish"]
+        Effect   = "Allow",
+        Action   = ["sns:Publish"],
         Resource = var.sns_topic_arn
       },
       {
-        Effect   = var.use_sagemaker_stub ? "Deny" : "Allow"
-        Action   = ["sagemaker:InvokeEndpoint"]
-        Resource = "*"
-      },
-      {
-        Effect = "Allow"
+        Effect = "Allow",
         Action = [
           "s3:GetObject",
           "s3:ListBucket"
-        ]
+        ],
         Resource = "*"
       }
     ]
@@ -73,13 +68,7 @@ resource "aws_lambda_function" "fn" {
   memory_size   = 256
 
   environment {
-    variables = merge(
-      var.environment_vars,
-      {
-        USE_SAGEMAKER_STUB = var.use_sagemaker_stub ? "true" : "false"
-        SAGEMAKER_ENDPOINT = var.sagemaker_endpoint
-      }
-    )
+    variables = var.environment_vars
   }
 
   tags = var.tags

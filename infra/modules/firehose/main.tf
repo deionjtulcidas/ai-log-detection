@@ -1,14 +1,14 @@
-variable "enabled"               { type = bool }
-variable "delivery_bucket_arn"   { type = string }
-variable "delivery_bucket_name"  { type = string }
-variable "stream_name"           { type = string }
-variable "tags"                  { type = map(string) }
+variable "enabled" { type = bool }
+variable "delivery_bucket_arn" { type = string }
+variable "delivery_bucket_name" { type = string }
+variable "stream_name" { type = string }
+variable "tags" { type = map(string) }
 
 resource "aws_iam_role" "firehose_role" {
   count = var.enabled ? 1 : 0
   name  = "${var.stream_name}-role"
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [{ Effect = "Allow", Principal = { Service = "firehose.amazonaws.com" }, Action = "sts:AssumeRole" }]
   })
   tags = var.tags
@@ -20,7 +20,7 @@ resource "aws_iam_role_policy" "firehose_policy" {
   policy = jsonencode({
     Version = "2012-10-17",
     Statement = [
-      { Effect="Allow", Action=["s3:PutObject","s3:PutObjectAcl","s3:AbortMultipartUpload","s3:ListBucket","s3:GetBucketLocation"], Resource=[var.delivery_bucket_arn, "${var.delivery_bucket_arn}/*"] }
+      { Effect = "Allow", Action = ["s3:PutObject", "s3:PutObjectAcl", "s3:AbortMultipartUpload", "s3:ListBucket", "s3:GetBucketLocation"], Resource = [var.delivery_bucket_arn, "${var.delivery_bucket_arn}/*"] }
     ]
   })
 }

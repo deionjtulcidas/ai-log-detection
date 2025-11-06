@@ -1,6 +1,6 @@
-variable "topic_name"          { type = string }
+variable "topic_name" { type = string }
 variable "email_subscriptions" { type = list(string) }
-variable "tags"                { type = map(string) }
+variable "tags" { type = map(string) }
 
 resource "aws_sns_topic" "alerts" {
   name = var.topic_name

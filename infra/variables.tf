@@ -19,25 +19,13 @@ variable "owner" {
 variable "alert_emails" {
   description = "List of email addresses to subscribe to SNS alerts"
   type        = list(string)
-  default     = ["dj161@pitt.edu"]
+  default     = ["djt61@pitt.edu"]
 }
 
 variable "alert_threshold" {
   description = "Alert threshold value for anomaly detection"
   type        = number
   default     = 80
-}
-
-variable "use_sagemaker_stub" {
-  description = "Use a local SageMaker stub instead of a real endpoint"
-  type        = bool
-  default     = true
-}
-
-variable "sagemaker_endpoint" {
-  description = "SageMaker endpoint name (if not using stub)"
-  type        = string
-  default     = ""
 }
 
 variable "ops_alarm_email" {
@@ -61,6 +49,7 @@ variable "tags" {
     Env     = "dev"
   }
 }
+
 variable "enable_firehose" {
   description = "Enable or disable the Kinesis Firehose module"
   type        = bool
