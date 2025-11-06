@@ -57,9 +57,10 @@ module "lambda_preprocess" {
   alert_threshold = var.alert_threshold
 
   environment_vars = {
-    PROJECT     = local.project
-    ALERT_TOPIC = module.sns_alerts.topic_arn
-    THRESHOLD   = tostring(var.alert_threshold)
+    PROJECT        = local.project
+    ALERT_TOPIC    = module.sns_alerts.topic_arn
+    THRESHOLD      = tostring(var.alert_threshold)
+    SNS_TOPIC_ARN  = module.sns_alerts.topic_arn
   }
 
   tags = local.tags
