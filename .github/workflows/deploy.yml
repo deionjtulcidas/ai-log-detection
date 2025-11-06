@@ -18,9 +18,10 @@ jobs:
 
       - name: Install dependencies and zip Lambda
         run: |
-          cd lambda
-          pip install -r requirements.txt -t .
-          zip -r ../lambda_function.zip .
+          cd infra/modules/lambda/src
+          pip install -r ../../requirements.txt -t .
+          mkdir -p ../../build
+          zip -r ../../build/lambda.zip .
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -32,5 +33,5 @@ jobs:
       - name: Initialize and deploy Terraform
         run: |
           cd infra
-          terraform init
+          terraform init -input=false
           terraform apply -auto-approve
