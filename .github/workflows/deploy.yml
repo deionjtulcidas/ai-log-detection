@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies and zip Lambda
         run: |
           cd infra/modules/lambda/src
-          pip install -r ../../requirements.txt -t .
+          pip install -r requirements.txt -t .
           mkdir -p ../../build
           zip -r ../../build/lambda.zip .
 
